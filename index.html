@@ -550,19 +550,19 @@
             height: 6px;
         }
 
-        /* ===== CERT CHECKBOXES ===== */
-        .cert-check {
+        /* ===== CHECKBOXES (certs + goals) ===== */
+        .check-label {
             display: flex;
             align-items: center;
             cursor: pointer;
             position: relative;
         }
 
-        .cert-check input {
+        .check-label input {
             display: none;
         }
 
-        .cert-check .checkmark {
+        .check-label .checkmark {
             width: 18px;
             height: 18px;
             border: 2px solid var(--border);
@@ -574,29 +574,29 @@
             flex-shrink: 0;
         }
 
-        .cert-check input:checked + .checkmark {
+        .check-label input:checked + .checkmark {
             background: var(--accent-green);
             border-color: var(--accent-green);
         }
 
-        .cert-check input:checked + .checkmark::after {
+        .check-label input:checked + .checkmark::after {
             content: '✓';
             color: var(--bg-primary);
             font-size: 12px;
             font-weight: 700;
         }
 
-        .cert-row.completed .name {
+        .checkable-row.completed .name {
             text-decoration: line-through;
             color: var(--text-secondary);
         }
 
-        .cert-row.completed .tag {
+        .checkable-row.completed .tag {
             background: rgba(158, 206, 106, 0.15);
             color: var(--accent-green);
         }
 
-        .cert-row.completed .tag::after {
+        .checkable-row.completed .tag::after {
             content: ' ✓';
         }
         ::-webkit-scrollbar-track {
@@ -662,9 +662,6 @@
                         cloud AWS, segurança (IAM/IRSA) e redes. Atuo com Terraform em escala, GitOps com ArgoCD,
                         EKS, e construção de Internal Developer Platforms.
                     </div>
-                    <div class="profile-links">
-                        <a href="https://github.com/annalaudaress" target="_blank">github/annalaudaress</a>
-                    </div>
                 </div>
             </div>
 
@@ -707,72 +704,54 @@
             <div class="k9s-table">
                 <div class="k9s-table-header">
                     <div class="title">Short-term goals</div>
-                    <div class="count">até fev/2027</div>
+                    <div class="count" id="goals-short-count">0/6</div>
                 </div>
-                <div class="k9s-row">
-                    <div class="status yellow"></div>
-                    <div class="name">
-                        AWS Solutions Architect Associate (SAA-C03)
-                        <div class="progress-container">
-                            <div class="progress-bar"><div class="progress-fill yellow" style="width:30%"></div></div>
-                            <div class="progress-label"><span>Estudando</span><span>30%</span></div>
-                        </div>
-                    </div>
+                <div class="k9s-row checkable-row" data-goal="goal-saa">
+                    <label class="check-label">
+                        <input type="checkbox" onchange="toggleGoal(this)">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="name">AWS Solutions Architect Associate (SAA-C03)</div>
                     <div class="tag tag-cert">CERT</div>
                 </div>
-                <div class="k9s-row">
-                    <div class="status yellow"></div>
-                    <div class="name">
-                        AWS AI Practitioner
-                        <div class="progress-container">
-                            <div class="progress-bar"><div class="progress-fill yellow" style="width:20%"></div></div>
-                            <div class="progress-label"><span>Planejado</span><span>20%</span></div>
-                        </div>
-                    </div>
+                <div class="k9s-row checkable-row" data-goal="goal-ai-practitioner">
+                    <label class="check-label">
+                        <input type="checkbox" onchange="toggleGoal(this)">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="name">AWS AI Practitioner</div>
                     <div class="tag tag-cert">CERT</div>
                 </div>
-                <div class="k9s-row">
-                    <div class="status blue"></div>
-                    <div class="name">
-                        Contribuir na construção de IDP (Internal Developer Platform)
-                        <div class="progress-container">
-                            <div class="progress-bar"><div class="progress-fill blue" style="width:40%"></div></div>
-                            <div class="progress-label"><span>Em progresso</span><span>40%</span></div>
-                        </div>
-                    </div>
+                <div class="k9s-row checkable-row" data-goal="goal-idp">
+                    <label class="check-label">
+                        <input type="checkbox" onchange="toggleGoal(this)">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="name">Contribuir na construção de IDP (Internal Developer Platform)</div>
                     <div class="tag tag-skill">SKILL</div>
                 </div>
-                <div class="k9s-row">
-                    <div class="status blue"></div>
-                    <div class="name">
-                        Aprofundar em segurança cloud (IAM policies, IRSA, least privilege)
-                        <div class="progress-container">
-                            <div class="progress-bar"><div class="progress-fill blue" style="width:60%"></div></div>
-                            <div class="progress-label"><span>Em progresso</span><span>60%</span></div>
-                        </div>
-                    </div>
+                <div class="k9s-row checkable-row" data-goal="goal-security">
+                    <label class="check-label">
+                        <input type="checkbox" onchange="toggleGoal(this)">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="name">Aprofundar em segurança cloud (IAM policies, IRSA, least privilege)</div>
                     <div class="tag tag-skill">SKILL</div>
                 </div>
-                <div class="k9s-row">
-                    <div class="status blue"></div>
-                    <div class="name">
-                        Aprofundar networking (VPC avançado, Transit Gateway, VPN, DNS)
-                        <div class="progress-container">
-                            <div class="progress-bar"><div class="progress-fill blue" style="width:50%"></div></div>
-                            <div class="progress-label"><span>Em progresso</span><span>50%</span></div>
-                        </div>
-                    </div>
+                <div class="k9s-row checkable-row" data-goal="goal-networking">
+                    <label class="check-label">
+                        <input type="checkbox" onchange="toggleGoal(this)">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="name">Aprofundar networking (VPC avançado, Transit Gateway, VPN, DNS)</div>
                     <div class="tag tag-skill">SKILL</div>
                 </div>
-                <div class="k9s-row">
-                    <div class="status green"></div>
-                    <div class="name">
-                        Apresentar tech talk interna
-                        <div class="progress-container">
-                            <div class="progress-bar"><div class="progress-fill green" style="width:25%"></div></div>
-                            <div class="progress-label"><span>Planejando tema</span><span>25%</span></div>
-                        </div>
-                    </div>
+                <div class="k9s-row checkable-row" data-goal="goal-talk-interna">
+                    <label class="check-label">
+                        <input type="checkbox" onchange="toggleGoal(this)">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="name">Apresentar tech talk interna</div>
                     <div class="tag tag-soft">SOFT</div>
                 </div>
             </div>
@@ -781,36 +760,54 @@
             <div class="k9s-table">
                 <div class="k9s-table-header">
                     <div class="title">Mid-term goals</div>
-                    <div class="count">até ago/2027</div>
+                    <div class="count" id="goals-mid-count">0/6</div>
                 </div>
-                <div class="k9s-row">
-                    <div class="status blue"></div>
+                <div class="k9s-row checkable-row" data-goal="goal-ckad">
+                    <label class="check-label">
+                        <input type="checkbox" onchange="toggleGoal(this)">
+                        <span class="checkmark"></span>
+                    </label>
                     <div class="name">CKAD — Certified Kubernetes Application Developer</div>
                     <div class="tag tag-cert">CERT</div>
                 </div>
-                <div class="k9s-row">
-                    <div class="status blue"></div>
+                <div class="k9s-row checkable-row" data-goal="goal-cloudops">
+                    <label class="check-label">
+                        <input type="checkbox" onchange="toggleGoal(this)">
+                        <span class="checkmark"></span>
+                    </label>
                     <div class="name">AWS SysOps / CloudOps</div>
                     <div class="tag tag-cert">CERT</div>
                 </div>
-                <div class="k9s-row">
-                    <div class="status blue"></div>
+                <div class="k9s-row checkable-row" data-goal="goal-developer">
+                    <label class="check-label">
+                        <input type="checkbox" onchange="toggleGoal(this)">
+                        <span class="checkmark"></span>
+                    </label>
                     <div class="name">AWS Developer Associate</div>
                     <div class="tag tag-cert">CERT</div>
                 </div>
-                <div class="k9s-row">
-                    <div class="status blue"></div>
+                <div class="k9s-row checkable-row" data-goal="goal-az900">
+                    <label class="check-label">
+                        <input type="checkbox" onchange="toggleGoal(this)">
+                        <span class="checkmark"></span>
+                    </label>
                     <div class="name">Microsoft Azure Fundamentals (AZ-900)</div>
                     <div class="tag tag-cert">CERT</div>
                 </div>
-                <div class="k9s-row">
-                    <div class="status blue"></div>
+                <div class="k9s-row checkable-row" data-goal="goal-netsec">
+                    <label class="check-label">
+                        <input type="checkbox" onchange="toggleGoal(this)">
+                        <span class="checkmark"></span>
+                    </label>
                     <div class="name">Dominar network security: WAF, Security Groups avançado, NACLs, VPC Endpoints</div>
                     <div class="tag tag-skill">SKILL</div>
                 </div>
-                <div class="k9s-row">
-                    <div class="status purple"></div>
-                    <div class="name">Liderar design de arquitetura de rede para novos projetos</div>
+                <div class="k9s-row checkable-row" data-goal="goal-talk-sec">
+                    <label class="check-label">
+                        <input type="checkbox" onchange="toggleGoal(this)">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="name">Apresentar tech talk interna sobre segurança ou redes</div>
                     <div class="tag tag-soft">SOFT</div>
                 </div>
             </div>
@@ -819,30 +816,45 @@
             <div class="k9s-table">
                 <div class="k9s-table-header">
                     <div class="title">Long-term vision</div>
-                    <div class="count">até 2031</div>
+                    <div class="count" id="goals-long-count">0/5</div>
                 </div>
-                <div class="k9s-row">
-                    <div class="status purple"></div>
+                <div class="k9s-row checkable-row" data-goal="goal-senior">
+                    <label class="check-label">
+                        <input type="checkbox" onchange="toggleGoal(this)">
+                        <span class="checkmark"></span>
+                    </label>
                     <div class="name">Alcançar nível Senior DevOps / Platform Engineer</div>
                     <div class="tag tag-goal">GOAL</div>
                 </div>
-                <div class="k9s-row">
-                    <div class="status purple"></div>
+                <div class="k9s-row checkable-row" data-goal="goal-idp-own">
+                    <label class="check-label">
+                        <input type="checkbox" onchange="toggleGoal(this)">
+                        <span class="checkmark"></span>
+                    </label>
                     <div class="name">Projetar e manter Internal Developer Platform (IDP)</div>
                     <div class="tag tag-goal">GOAL</div>
                 </div>
-                <div class="k9s-row">
-                    <div class="status purple"></div>
+                <div class="k9s-row checkable-row" data-goal="goal-devsecops-ref">
+                    <label class="check-label">
+                        <input type="checkbox" onchange="toggleGoal(this)">
+                        <span class="checkmark"></span>
+                    </label>
                     <div class="name">Ser referência em DevSecOps e security-first infrastructure</div>
                     <div class="tag tag-goal">GOAL</div>
                 </div>
-                <div class="k9s-row">
-                    <div class="status purple"></div>
+                <div class="k9s-row checkable-row" data-goal="goal-pro-certs">
+                    <label class="check-label">
+                        <input type="checkbox" onchange="toggleGoal(this)">
+                        <span class="checkmark"></span>
+                    </label>
                     <div class="name">AWS DevOps Professional + CKA + CKS</div>
                     <div class="tag tag-cert">CERT</div>
                 </div>
-                <div class="k9s-row">
-                    <div class="status purple"></div>
+                <div class="k9s-row checkable-row" data-goal="goal-opensource">
+                    <label class="check-label">
+                        <input type="checkbox" onchange="toggleGoal(this)">
+                        <span class="checkmark"></span>
+                    </label>
                     <div class="name">Contribuir com projetos open-source de infraestrutura/segurança</div>
                     <div class="tag tag-goal">GOAL</div>
                 </div>
@@ -892,7 +904,7 @@
                     <div class="period">2030–2031</div>
                     <div class="item-title">Staff / Referência técnica</div>
                     <div class="item-desc">
-                        CKA + CKS • Contribuições open-source • Talks em eventos • Projetar IDPs e security frameworks greenfield
+                        CKA + CKS • Contribuições open-source • Ampliar talks em eventos (já ativa) • Projetar IDPs e security frameworks greenfield
                     </div>
                 </div>
             </div>
@@ -912,22 +924,22 @@
                 <div class="skill-card">
                     <div class="skill-name">CI/CD (GitHub Actions, GitLab CI, ArgoCD)</div>
                     <div class="progress-container">
-                        <div class="progress-bar"><div class="progress-fill green" style="width:80%"></div></div>
-                        <div class="progress-label"><span>Avançado</span><span>80%</span></div>
+                        <div class="progress-bar"><div class="progress-fill blue" style="width:60%"></div></div>
+                        <div class="progress-label"><span>Intermediário</span><span>60%</span></div>
                     </div>
                 </div>
                 <div class="skill-card">
                     <div class="skill-name">GitOps (ArgoCD — multi-environment)</div>
                     <div class="progress-container">
-                        <div class="progress-bar"><div class="progress-fill green" style="width:75%"></div></div>
-                        <div class="progress-label"><span>Avançado</span><span>75%</span></div>
+                        <div class="progress-bar"><div class="progress-fill blue" style="width:60%"></div></div>
+                        <div class="progress-label"><span>Intermediário</span><span>60%</span></div>
                     </div>
                 </div>
                 <div class="skill-card">
                     <div class="skill-name">Docker / Containers / ECR</div>
                     <div class="progress-container">
-                        <div class="progress-bar"><div class="progress-fill green" style="width:80%"></div></div>
-                        <div class="progress-label"><span>Avançado</span><span>80%</span></div>
+                        <div class="progress-bar"><div class="progress-fill blue" style="width:60%"></div></div>
+                        <div class="progress-label"><span>Intermediário</span><span>60%</span></div>
                     </div>
                 </div>
                 <div class="skill-card">
@@ -961,8 +973,8 @@
                 <div class="skill-card">
                     <div class="skill-name">Linux / Shell scripting</div>
                     <div class="progress-container">
-                        <div class="progress-bar"><div class="progress-fill green" style="width:75%"></div></div>
-                        <div class="progress-label"><span>Avançado</span><span>75%</span></div>
+                        <div class="progress-bar"><div class="progress-fill blue" style="width:60%"></div></div>
+                        <div class="progress-label"><span>Intermediário</span><span>60%</span></div>
                     </div>
                 </div>
                 <div class="skill-card">
@@ -1007,8 +1019,8 @@
                 <div class="skill-card">
                     <div class="skill-name">Documentação / Knowledge sharing</div>
                     <div class="progress-container">
-                        <div class="progress-bar"><div class="progress-fill green" style="width:65%"></div></div>
-                        <div class="progress-label"><span>Ativo</span><span>65%</span></div>
+                        <div class="progress-bar"><div class="progress-fill yellow" style="width:40%"></div></div>
+                        <div class="progress-label"><span>Desenvolvendo</span><span>40%</span></div>
                     </div>
                 </div>
             </div>
@@ -1198,8 +1210,8 @@
                     <div class="title">Short-term (6 meses)</div>
                     <div class="count" id="certs-short-count">0/2</div>
                 </div>
-                <div class="k9s-row cert-row" data-cert="ai-practitioner">
-                    <label class="cert-check">
+                <div class="k9s-row checkable-row" data-cert="ai-practitioner">
+                    <label class="check-label">
                         <input type="checkbox" onchange="toggleCert(this)">
                         <span class="checkmark"></span>
                     </label>
@@ -1207,8 +1219,8 @@
                     <div class="meta">Foundational</div>
                     <div class="tag tag-cert">AWS</div>
                 </div>
-                <div class="k9s-row cert-row" data-cert="saa">
-                    <label class="cert-check">
+                <div class="k9s-row checkable-row" data-cert="saa">
+                    <label class="check-label">
                         <input type="checkbox" onchange="toggleCert(this)">
                         <span class="checkmark"></span>
                     </label>
@@ -1223,8 +1235,8 @@
                     <div class="title">Mid-term (1 ano)</div>
                     <div class="count" id="certs-mid-count">0/5</div>
                 </div>
-                <div class="k9s-row cert-row" data-cert="ckad">
-                    <label class="cert-check">
+                <div class="k9s-row checkable-row" data-cert="ckad">
+                    <label class="check-label">
                         <input type="checkbox" onchange="toggleCert(this)">
                         <span class="checkmark"></span>
                     </label>
@@ -1232,8 +1244,8 @@
                     <div class="meta">CNCF</div>
                     <div class="tag tag-cert">K8S</div>
                 </div>
-                <div class="k9s-row cert-row" data-cert="cloudops">
-                    <label class="cert-check">
+                <div class="k9s-row checkable-row" data-cert="cloudops">
+                    <label class="check-label">
                         <input type="checkbox" onchange="toggleCert(this)">
                         <span class="checkmark"></span>
                     </label>
@@ -1241,8 +1253,8 @@
                     <div class="meta">Associate</div>
                     <div class="tag tag-cert">AWS</div>
                 </div>
-                <div class="k9s-row cert-row" data-cert="developer">
-                    <label class="cert-check">
+                <div class="k9s-row checkable-row" data-cert="developer">
+                    <label class="check-label">
                         <input type="checkbox" onchange="toggleCert(this)">
                         <span class="checkmark"></span>
                     </label>
@@ -1250,8 +1262,8 @@
                     <div class="meta">Associate</div>
                     <div class="tag tag-cert">AWS</div>
                 </div>
-                <div class="k9s-row cert-row" data-cert="az900">
-                    <label class="cert-check">
+                <div class="k9s-row checkable-row" data-cert="az900">
+                    <label class="check-label">
                         <input type="checkbox" onchange="toggleCert(this)">
                         <span class="checkmark"></span>
                     </label>
@@ -1259,8 +1271,8 @@
                     <div class="meta">Foundational</div>
                     <div class="tag tag-cert">AZURE</div>
                 </div>
-                <div class="k9s-row cert-row" data-cert="ccst-cyber">
-                    <label class="cert-check">
+                <div class="k9s-row checkable-row" data-cert="ccst-cyber">
+                    <label class="check-label">
                         <input type="checkbox" onchange="toggleCert(this)">
                         <span class="checkmark"></span>
                     </label>
@@ -1275,8 +1287,8 @@
                     <div class="title">Long-term (5 anos)</div>
                     <div class="count" id="certs-long-count">0/3</div>
                 </div>
-                <div class="k9s-row cert-row" data-cert="devops-pro">
-                    <label class="cert-check">
+                <div class="k9s-row checkable-row" data-cert="devops-pro">
+                    <label class="check-label">
                         <input type="checkbox" onchange="toggleCert(this)">
                         <span class="checkmark"></span>
                     </label>
@@ -1284,8 +1296,8 @@
                     <div class="meta">Professional</div>
                     <div class="tag tag-cert">AWS</div>
                 </div>
-                <div class="k9s-row cert-row" data-cert="cka">
-                    <label class="cert-check">
+                <div class="k9s-row checkable-row" data-cert="cka">
+                    <label class="check-label">
                         <input type="checkbox" onchange="toggleCert(this)">
                         <span class="checkmark"></span>
                     </label>
@@ -1293,8 +1305,8 @@
                     <div class="meta">CNCF</div>
                     <div class="tag tag-cert">K8S</div>
                 </div>
-                <div class="k9s-row cert-row" data-cert="cks">
-                    <label class="cert-check">
+                <div class="k9s-row checkable-row" data-cert="cks">
+                    <label class="check-label">
                         <input type="checkbox" onchange="toggleCert(this)">
                         <span class="checkmark"></span>
                     </label>
@@ -1344,6 +1356,7 @@
 
         // === CERT TRACKER ===
         const CERT_KEY = 'pdi-certs-completed';
+        const GOAL_KEY = 'pdi-goals-completed';
 
         function getCertState() {
             try {
@@ -1351,12 +1364,22 @@
             } catch { return {}; }
         }
 
+        function getGoalState() {
+            try {
+                return JSON.parse(localStorage.getItem(GOAL_KEY)) || {};
+            } catch { return {}; }
+        }
+
         function saveCertState(state) {
             localStorage.setItem(CERT_KEY, JSON.stringify(state));
         }
 
+        function saveGoalState(state) {
+            localStorage.setItem(GOAL_KEY, JSON.stringify(state));
+        }
+
         function toggleCert(checkbox) {
-            const row = checkbox.closest('.cert-row');
+            const row = checkbox.closest('.checkable-row');
             const certId = row.dataset.cert;
             const state = getCertState();
 
@@ -1372,6 +1395,23 @@
             updateCertCounts();
         }
 
+        function toggleGoal(checkbox) {
+            const row = checkbox.closest('.checkable-row');
+            const goalId = row.dataset.goal;
+            const state = getGoalState();
+
+            if (checkbox.checked) {
+                state[goalId] = true;
+                row.classList.add('completed');
+            } else {
+                delete state[goalId];
+                row.classList.remove('completed');
+            }
+
+            saveGoalState(state);
+            updateGoalCounts();
+        }
+
         function updateCertCounts() {
             const state = getCertState();
             const shortCerts = ['ai-practitioner', 'saa'];
@@ -1385,18 +1425,43 @@
             document.getElementById('certs-long-count').textContent = `${countDone(longCerts)}/${longCerts.length}`;
         }
 
-        // Load saved cert state on page load
-        (function loadCerts() {
-            const state = getCertState();
-            document.querySelectorAll('.cert-row').forEach(row => {
+        function updateGoalCounts() {
+            const state = getGoalState();
+            const shortGoals = ['goal-saa', 'goal-ai-practitioner', 'goal-idp', 'goal-security', 'goal-networking', 'goal-talk-interna'];
+            const midGoals = ['goal-ckad', 'goal-cloudops', 'goal-developer', 'goal-az900', 'goal-netsec', 'goal-talk-sec'];
+            const longGoals = ['goal-senior', 'goal-idp-own', 'goal-devsecops-ref', 'goal-pro-certs', 'goal-opensource'];
+
+            const countDone = (arr) => arr.filter(g => state[g]).length;
+
+            document.getElementById('goals-short-count').textContent = `${countDone(shortGoals)}/${shortGoals.length}`;
+            document.getElementById('goals-mid-count').textContent = `${countDone(midGoals)}/${midGoals.length}`;
+            document.getElementById('goals-long-count').textContent = `${countDone(longGoals)}/${longGoals.length}`;
+        }
+
+        // Load saved state on page load
+        (function loadState() {
+            const certState = getCertState();
+            document.querySelectorAll('[data-cert]').forEach(row => {
                 const certId = row.dataset.cert;
-                if (state[certId]) {
+                if (certState[certId]) {
                     const checkbox = row.querySelector('input[type="checkbox"]');
                     checkbox.checked = true;
                     row.classList.add('completed');
                 }
             });
+
+            const goalState = getGoalState();
+            document.querySelectorAll('[data-goal]').forEach(row => {
+                const goalId = row.dataset.goal;
+                if (goalState[goalId]) {
+                    const checkbox = row.querySelector('input[type="checkbox"]');
+                    checkbox.checked = true;
+                    row.classList.add('completed');
+                }
+            });
+
             updateCertCounts();
+            updateGoalCounts();
         })();
     </script>
 
