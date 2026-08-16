@@ -1221,7 +1221,7 @@
             <div class="k9s-table">
                 <div class="k9s-table-header">
                     <div class="title">Mid-term (1 ano)</div>
-                    <div class="count" id="certs-mid-count">0/4</div>
+                    <div class="count" id="certs-mid-count">0/5</div>
                 </div>
                 <div class="k9s-row cert-row" data-cert="ckad">
                     <label class="cert-check">
@@ -1258,6 +1258,15 @@
                     <div class="name">Microsoft Azure Fundamentals (AZ-900)</div>
                     <div class="meta">Foundational</div>
                     <div class="tag tag-cert">AZURE</div>
+                </div>
+                <div class="k9s-row cert-row" data-cert="ccst-cyber">
+                    <label class="cert-check">
+                        <input type="checkbox" onchange="toggleCert(this)">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="name">CCST Cybersecurity (Cisco)</div>
+                    <div class="meta">Associate</div>
+                    <div class="tag tag-cert">CISCO</div>
                 </div>
             </div>
 
@@ -1366,7 +1375,7 @@
         function updateCertCounts() {
             const state = getCertState();
             const shortCerts = ['ai-practitioner', 'saa'];
-            const midCerts = ['ckad', 'cloudops', 'developer', 'az900'];
+            const midCerts = ['ckad', 'cloudops', 'developer', 'az900', 'ccst-cyber'];
             const longCerts = ['devops-pro', 'cka', 'cks'];
 
             const countDone = (arr) => arr.filter(c => state[c]).length;
