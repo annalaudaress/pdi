@@ -760,7 +760,7 @@
             <div class="k9s-table">
                 <div class="k9s-table-header">
                     <div class="title">Mid-term goals</div>
-                    <div class="count" id="goals-mid-count">0/6</div>
+                    <div class="count" id="goals-mid-count">0/8</div>
                 </div>
                 <div class="k9s-row checkable-row" data-goal="goal-ckad">
                     <label class="check-label">
@@ -809,6 +809,22 @@
                     </label>
                     <div class="name">Apresentar tech talk interna sobre segurança ou redes</div>
                     <div class="tag tag-soft">SOFT</div>
+                </div>
+                <div class="k9s-row checkable-row" data-goal="goal-kcna-ambassador">
+                    <label class="check-label">
+                        <input type="checkbox" onchange="toggleGoal(this)">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="name">Ser KCNA Community Ambassador</div>
+                    <div class="tag tag-goal">COMUNIDADE</div>
+                </div>
+                <div class="k9s-row checkable-row" data-goal="goal-aws-builder">
+                    <label class="check-label">
+                        <input type="checkbox" onchange="toggleGoal(this)">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="name">Ser AWS Community Builder</div>
+                    <div class="tag tag-goal">COMUNIDADE</div>
                 </div>
             </div>
 
@@ -1121,21 +1137,6 @@
                 </div>
             </div>
 
-            <div class="contribution-item">
-                <div class="contrib-header">
-                    <div class="contrib-title">Knowledge Base DevOps compartilhada</div>
-                    <div class="contrib-date">Empresa atual</div>
-                </div>
-                <div class="contrib-desc">
-                    Construção de base de conhecimento do time DevOps com documentação de 
-                    troubleshooting, runbooks, decisões arquiteturais e padrões de infraestrutura.
-                </div>
-                <div class="contrib-tags">
-                    <span class="contrib-tag">Documentação</span>
-                    <span class="contrib-tag">Knowledge sharing</span>
-                    <span class="contrib-tag">DevOps culture</span>
-                </div>
-            </div>
         </div>
 
         <!-- ===== CARREIRA ===== -->
@@ -1428,7 +1429,7 @@
         function updateGoalCounts() {
             const state = getGoalState();
             const shortGoals = ['goal-saa', 'goal-ai-practitioner', 'goal-idp', 'goal-security', 'goal-networking', 'goal-talk-interna'];
-            const midGoals = ['goal-ckad', 'goal-cloudops', 'goal-developer', 'goal-az900', 'goal-netsec', 'goal-talk-sec'];
+            const midGoals = ['goal-ckad', 'goal-cloudops', 'goal-developer', 'goal-az900', 'goal-netsec', 'goal-talk-sec', 'goal-kcna-ambassador', 'goal-aws-builder'];
             const longGoals = ['goal-senior', 'goal-idp-own', 'goal-devsecops-ref', 'goal-pro-certs', 'goal-opensource'];
 
             const countDone = (arr) => arr.filter(g => state[g]).length;
