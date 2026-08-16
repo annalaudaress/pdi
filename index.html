@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDI — Anna Laura | DevOps Engineer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1a1b26;
+            --bg-secondary: #24283b;
+            --bg-tertiary: #1f2335;
+            --border: #3b4261;
+            --border-active: #7aa2f7;
+            --text-primary: #c0caf5;
+            --text-secondary: #565f89;
+            --text-muted: #444b6a;
+            --accent-blue: #7aa2f7;
+            --accent-green: #9ece6a;
+            --accent-yellow: #e0af68;
+            --accent-red: #f7768e;
+            --accent-purple: #bb9af7;
+            --accent-cyan: #7dcfff;
+            --accent-orange: #ff9e64;
+            --k9s-header: #292e42;
+            --k9s-selected: #283457;
+            --scrollbar: #3b4261;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* ===== K9S TOP BAR ===== */
+        .k9s-topbar {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .k9s-topbar .left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .k9s-topbar .logo {
+            color: var(--accent-blue);
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .k9s-topbar .context {
+            color: var(--accent-yellow);
+            font-size: 11px;
+        }
+
+        .k9s-topbar .right {
+            display: flex;
+            gap: 16px;
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .k9s-topbar .right span {
+            color: var(--accent-green);
+        }
+
+        /* ===== NAVIGATION TABS (k9s style) ===== */
+        .k9s-nav {
+            background: var(--k9s-header);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            overflow-x: auto;
+            padding: 0;
+        }
+
+        .k9s-nav button {
+            background: none;
+            border: none;
+            font-family: inherit;
+            font-size: 12px;
+            padding: 10px 20px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .k9s-nav button:hover {
+            color: var(--text-primary);
+            background: rgba(122, 162, 247, 0.05);
+        }
+
+        .k9s-nav button.active {
+            color: var(--accent-blue);
+            border-bottom-color: var(--accent-blue);
+            background: rgba(122, 162, 247, 0.08);
+        }
+
+        .k9s-nav button .shortcut {
+            color: var(--accent-yellow);
+            font-size: 10px;
+            margin-left: 6px;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .panel {
+            display: none;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        /* ===== K9S TABLE STYLE ===== */
+        .k9s-table {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .k9s-table-header {
+            background: var(--k9s-header);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .k9s-table-header .title {
+            color: var(--accent-cyan);
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .k9s-table-header .count {
+            color: var(--text-secondary);
+            font-size: 11px;
+        }
+
+        .k9s-row {
+            padding: 10px 16px;
+            border-bottom: 1px solid rgba(59, 66, 97, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background 0.15s;
+        }
+
+        .k9s-row:hover {
+            background: var(--k9s-selected);
+        }
+
+        .k9s-row:last-child {
+            border-bottom: none;
+        }
+
+        .k9s-row .status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .k9s-row .status.green { background: var(--accent-green); }
+        .k9s-row .status.yellow { background: var(--accent-yellow); }
+        .k9s-row .status.blue { background: var(--accent-blue); }
+        .k9s-row .status.red { background: var(--accent-red); }
+        .k9s-row .status.purple { background: var(--accent-purple); }
+
+        .k9s-row .name {
+            flex: 1;
+            color: var(--text-primary);
+        }
+
+        .k9s-row .meta {
+            color: var(--text-secondary);
+            font-size: 11px;
+        }
+
+        .k9s-row .tag {
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .tag-cert { background: rgba(122, 162, 247, 0.15); color: var(--accent-blue); }
+        .tag-skill { background: rgba(158, 206, 106, 0.15); color: var(--accent-green); }
+        .tag-soft { background: rgba(187, 154, 247, 0.15); color: var(--accent-purple); }
+        .tag-goal { background: rgba(224, 175, 104, 0.15); color: var(--accent-yellow); }
+        .tag-done { background: rgba(158, 206, 106, 0.15); color: var(--accent-green); }
+        .tag-progress { background: rgba(122, 162, 247, 0.15); color: var(--accent-blue); }
+        .tag-planned { background: rgba(86, 95, 137, 0.2); color: var(--text-secondary); }
+
+        /* ===== PROFILE SECTION ===== */
+        .profile-card {
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 4px;
+            background: var(--k9s-header);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: var(--accent-blue);
+        }
+
+        .profile-info h1 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin-bottom: 4px;
+        }
+
+        .profile-info .title {
+            color: var(--accent-green);
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .profile-info .bio {
+            color: var(--text-secondary);
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .profile-links {
+            display: flex;
+            gap: 16px;
+            margin-top: 10px;
+        }
+
+        .profile-links a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-size: 11px;
+            transition: color 0.2s;
+        }
+
+        .profile-links a:hover {
+            color: var(--accent-blue);
+        }
+
+        /* ===== PROGRESS BARS ===== */
+        .progress-container {
+            margin-top: 6px;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: var(--bg-tertiary);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.8s ease;
+        }
+
+        .progress-fill.green { background: var(--accent-green); }
+        .progress-fill.blue { background: var(--accent-blue); }
+        .progress-fill.yellow { background: var(--accent-yellow); }
+        .progress-fill.purple { background: var(--accent-purple); }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: var(--text-secondary);
+            margin-top: 3px;
+        }
+
+        /* ===== ROADMAP TIMELINE ===== */
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--bg-secondary);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -21px;
+            top: 16px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-blue);
+            background: var(--bg-primary);
+        }
+
+        .timeline-item.completed::before {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .timeline-item.current::before {
+            background: var(--accent-yellow);
+            border-color: var(--accent-yellow);
+            box-shadow: 0 0 8px rgba(224, 175, 104, 0.4);
+        }
+
+        .timeline-item .period {
+            font-size: 10px;
+            color: var(--accent-yellow);
+            margin-bottom: 4px;
+        }
+
+        .timeline-item .item-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .timeline-item .item-desc {
+            color: var(--text-secondary);
+            font-size: 11px;
+        }
+
+        /* ===== COMMAND LINE FOOTER ===== */
+        .k9s-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 6px 16px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            z-index: 100;
+        }
+
+        .k9s-footer .commands {
+            display: flex;
+            gap: 16px;
+            color: var(--text-secondary);
+        }
+
+        .k9s-footer .commands kbd {
+            color: var(--accent-yellow);
+            font-family: inherit;
+            margin-right: 4px;
+        }
+
+        .k9s-footer .status-right {
+            color: var(--accent-green);
+        }
+
+        /* ===== SECTION TITLE ===== */
+        .section-title {
+            color: var(--accent-cyan);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* ===== SKILL GRID ===== */
+        .skill-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+        .skill-card {
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 14px;
+            background: var(--bg-secondary);
+        }
+
+        .skill-card .skill-name {
+            color: var(--text-primary);
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .skill-card .skill-level {
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+
+        /* ===== CONTRIBUTIONS ===== */
+        .contribution-item {
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 12px;
+            background: var(--bg-secondary);
+        }
+
+        .contribution-item .contrib-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .contribution-item .contrib-title {
+            color: var(--accent-green);
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .contribution-item .contrib-date {
+            color: var(--text-secondary);
+            font-size: 10px;
+        }
+
+        .contribution-item .contrib-desc {
+            color: var(--text-secondary);
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .contribution-item .contrib-tags {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .contribution-item .contrib-tag {
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 10px;
+            background: rgba(122, 162, 247, 0.1);
+            color: var(--accent-blue);
+        }
+
+        /* ===== CAREER VISION ===== */
+        .vision-card {
+            border: 1px solid var(--accent-blue);
+            border-radius: 4px;
+            padding: 20px;
+            background: rgba(122, 162, 247, 0.03);
+            margin-bottom: 20px;
+        }
+
+        .vision-card h3 {
+            color: var(--accent-blue);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .vision-card p {
+            color: var(--text-secondary);
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .profile-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .profile-avatar {
+                margin: 0 auto;
+            }
+            .profile-links {
+                justify-content: center;
+            }
+            .skill-grid {
+                grid-template-columns: 1fr;
+            }
+            .k9s-footer .commands {
+                display: none;
+            }
+            .main {
+                padding: 16px 12px 60px;
+            }
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar);
+            border-radius: 3px;
+        }
+
+        /* padding bottom for footer */
+        body {
+            padding-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="k9s-topbar">
+        <div class="left">
+            <div class="logo">⎈ PDI</div>
+            <div class="context">ctx: anna-laura/devops-engineer</div>
+        </div>
+        <div class="right">
+            <div>atualizado: <span>ago/2026</span></div>
+            <div>período: <span>2026–2031</span></div>
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="k9s-nav">
+        <button class="active" onclick="showPanel('profile')" data-panel="profile">
+            Perfil <span class="shortcut">:1</span>
+        </button>
+        <button onclick="showPanel('goals')" data-panel="goals">
+            Metas <span class="shortcut">:2</span>
+        </button>
+        <button onclick="showPanel('roadmap')" data-panel="roadmap">
+            Roadmap <span class="shortcut">:3</span>
+        </button>
+        <button onclick="showPanel('skills')" data-panel="skills">
+            Skills <span class="shortcut">:4</span>
+        </button>
+        <button onclick="showPanel('contributions')" data-panel="contributions">
+            Contribuições <span class="shortcut">:5</span>
+        </button>
+        <button onclick="showPanel('career')" data-panel="career">
+            Carreira <span class="shortcut">:6</span>
+        </button>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+
+        <!-- ===== PERFIL ===== -->
+        <div class="panel active" id="panel-profile">
+            <div class="profile-card">
+                <div class="profile-avatar">AL</div>
+                <div class="profile-info">
+                    <h1>Anna Laura</h1>
+                    <div class="title">DevOps Engineer</div>
+                    <div class="bio">
+                        Engenheira DevOps com experiência em automação de infraestrutura, CI/CD, containers e cloud AWS.
+                        Foco em observabilidade, GitOps e sustentabilidade em cloud (Green Cloud). Criadora do Carbon Lens.
+                    </div>
+                    <div class="profile-links">
+                        <a href="https://github.com/annalaudaress" target="_blank">github/annalaudaress</a>
+                        <a href="https://annalaudaress.github.io/carbon-lens/" target="_blank">carbon-lens</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="k9s-table">
+                <div class="k9s-table-header">
+                    <div class="title">› Resumo do PDI</div>
+                    <div class="count">6 meses · 1 ano · 5 anos</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status green"></div>
+                    <div class="name">Certificações planejadas</div>
+                    <div class="meta">AWS SAA + CKAD</div>
+                    <div class="tag tag-cert">CERT</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status blue"></div>
+                    <div class="name">Foco técnico principal</div>
+                    <div class="meta">Kubernetes · Terraform · Observabilidade</div>
+                    <div class="tag tag-skill">SKILL</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status purple"></div>
+                    <div class="name">Soft skills em desenvolvimento</div>
+                    <div class="meta">Liderança técnica · Documentação · Mentoria</div>
+                    <div class="tag tag-soft">SOFT</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status yellow"></div>
+                    <div class="name">Objetivo de carreira</div>
+                    <div class="meta">Senior DevOps → Staff/Platform Engineer</div>
+                    <div class="tag tag-goal">GOAL</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== METAS ===== -->
+        <div class="panel" id="panel-goals">
+            <div class="section-title">› Metas — 6 meses</div>
+            <div class="k9s-table">
+                <div class="k9s-table-header">
+                    <div class="title">Short-term goals</div>
+                    <div class="count">até fev/2027</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status yellow"></div>
+                    <div class="name">
+                        AWS Solutions Architect Associate (SAA-C03)
+                        <div class="progress-container">
+                            <div class="progress-bar"><div class="progress-fill yellow" style="width:30%"></div></div>
+                            <div class="progress-label"><span>Estudando</span><span>30%</span></div>
+                        </div>
+                    </div>
+                    <div class="tag tag-cert">CERT</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status blue"></div>
+                    <div class="name">
+                        Dominar Helm charts + Kustomize em produção
+                        <div class="progress-container">
+                            <div class="progress-bar"><div class="progress-fill blue" style="width:50%"></div></div>
+                            <div class="progress-label"><span>Em progresso</span><span>50%</span></div>
+                        </div>
+                    </div>
+                    <div class="tag tag-skill">SKILL</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status blue"></div>
+                    <div class="name">
+                        Implementar observabilidade com Prometheus + Grafana
+                        <div class="progress-container">
+                            <div class="progress-bar"><div class="progress-fill blue" style="width:40%"></div></div>
+                            <div class="progress-label"><span>Em progresso</span><span>40%</span></div>
+                        </div>
+                    </div>
+                    <div class="tag tag-skill">SKILL</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status green"></div>
+                    <div class="name">
+                        Documentar runbooks dos serviços que opero
+                        <div class="progress-container">
+                            <div class="progress-bar"><div class="progress-fill green" style="width:20%"></div></div>
+                            <div class="progress-label"><span>Iniciado</span><span>20%</span></div>
+                        </div>
+                    </div>
+                    <div class="tag tag-soft">SOFT</div>
+                </div>
+            </div>
+
+            <div class="section-title">› Metas — 1 ano</div>
+            <div class="k9s-table">
+                <div class="k9s-table-header">
+                    <div class="title">Mid-term goals</div>
+                    <div class="count">até ago/2027</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status blue"></div>
+                    <div class="name">CKAD — Certified Kubernetes Application Developer</div>
+                    <div class="tag tag-cert">CERT</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status blue"></div>
+                    <div class="name">Terraform em escala: modules, workspaces, Atlantis</div>
+                    <div class="tag tag-skill">SKILL</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status blue"></div>
+                    <div class="name">Liderar implementação de GitOps (ArgoCD/Flux) no time</div>
+                    <div class="tag tag-skill">SKILL</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status purple"></div>
+                    <div class="name">Mentorar 1 pessoa júnior em DevOps</div>
+                    <div class="tag tag-soft">SOFT</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status purple"></div>
+                    <div class="name">Apresentar tech talk interna (CI/CD ou Observabilidade)</div>
+                    <div class="tag tag-soft">SOFT</div>
+                </div>
+            </div>
+
+            <div class="section-title">› Metas — 5 anos</div>
+            <div class="k9s-table">
+                <div class="k9s-table-header">
+                    <div class="title">Long-term vision</div>
+                    <div class="count">até 2031</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status purple"></div>
+                    <div class="name">Alcançar nível Senior/Staff DevOps ou Platform Engineer</div>
+                    <div class="tag tag-goal">GOAL</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status purple"></div>
+                    <div class="name">Projetar e manter plataforma interna (IDP)</div>
+                    <div class="tag tag-goal">GOAL</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status purple"></div>
+                    <div class="name">Contribuir com projetos open-source de infraestrutura</div>
+                    <div class="tag tag-goal">GOAL</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status purple"></div>
+                    <div class="name">AWS DevOps Professional ou CKA + CKS</div>
+                    <div class="tag tag-cert">CERT</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status purple"></div>
+                    <div class="name">Referência técnica em sustentabilidade cloud (GreenOps)</div>
+                    <div class="tag tag-goal">GOAL</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== ROADMAP ===== -->
+        <div class="panel" id="panel-roadmap">
+            <div class="section-title">› Roadmap técnico</div>
+            <div class="timeline">
+                <div class="timeline-item current">
+                    <div class="period">Ago–Nov 2026 (agora)</div>
+                    <div class="item-title">Fundação Cloud + Containers</div>
+                    <div class="item-desc">
+                        AWS SAA study plan • Helm/Kustomize em produção • Aprofundar networking (VPC, Transit Gateway) • Prometheus stack
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="period">Dez 2026 – Fev 2027</div>
+                    <div class="item-title">Certificação AWS SAA + Observabilidade</div>
+                    <div class="item-desc">
+                        Prova AWS SAA • Grafana dashboards avançados • Alerting com PagerDuty/OpsGenie • SLOs e Error Budgets
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="period">Mar–Jun 2027</div>
+                    <div class="item-title">Kubernetes avançado + CKAD</div>
+                    <div class="item-desc">
+                        CKAD prep • Service Mesh (Istio/Linkerd) • Autoscaling (HPA/VPA/KEDA) • Multi-cluster strategies
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="period">Jul–Dez 2027</div>
+                    <div class="item-title">Platform Engineering + IaC Avançado</div>
+                    <div class="item-desc">
+                        Terraform modules/Atlantis • Backstage/Port (IDP) • Crossplane • Golden paths para devs
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="period">2028–2029</div>
+                    <div class="item-title">Staff-level + GreenOps</div>
+                    <div class="item-desc">
+                        Arquitetura de plataforma multi-cloud • FinOps + GreenOps • AWS DevOps Professional • Tech Lead responsibilities
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="period">2030–2031</div>
+                    <div class="item-title">Referência técnica + Open Source</div>
+                    <div class="item-desc">
+                        CKA + CKS • Contribuições open-source significativas • Talks em eventos • Projetar IDPs greenfield
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SKILLS ===== -->
+        <div class="panel" id="panel-skills">
+            <div class="section-title">› Hard Skills</div>
+            <div class="skill-grid">
+                <div class="skill-card">
+                    <div class="skill-name">AWS (EC2, ECS, Lambda, S3, IAM, VPC)</div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill green" style="width:65%"></div></div>
+                        <div class="progress-label"><span>Intermediário+</span><span>65%</span></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-name">Kubernetes / k9s / EKS</div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill blue" style="width:55%"></div></div>
+                        <div class="progress-label"><span>Intermediário</span><span>55%</span></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-name">Terraform / IaC</div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill blue" style="width:50%"></div></div>
+                        <div class="progress-label"><span>Intermediário</span><span>50%</span></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-name">CI/CD (GitHub Actions, GitLab CI, ArgoCD)</div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill green" style="width:70%"></div></div>
+                        <div class="progress-label"><span>Avançado</span><span>70%</span></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-name">Docker / Containers</div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill green" style="width:75%"></div></div>
+                        <div class="progress-label"><span>Avançado</span><span>75%</span></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-name">GitOps (ArgoCD / Flux)</div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill green" style="width:60%"></div></div>
+                        <div class="progress-label"><span>Intermediário+</span><span>60%</span></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-name">Observabilidade (Prometheus, Grafana, Loki)</div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill yellow" style="width:40%"></div></div>
+                        <div class="progress-label"><span>Aprendendo</span><span>40%</span></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-name">Linux / Shell scripting</div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill green" style="width:70%"></div></div>
+                        <div class="progress-label"><span>Avançado</span><span>70%</span></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-name">Python (automação / scripts)</div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill blue" style="width:45%"></div></div>
+                        <div class="progress-label"><span>Intermediário</span><span>45%</span></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-name">Networking (DNS, Load Balancers, VPN)</div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill blue" style="width:50%"></div></div>
+                        <div class="progress-label"><span>Intermediário</span><span>50%</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title" style="margin-top:24px">› Soft Skills</div>
+            <div class="skill-grid">
+                <div class="skill-card">
+                    <div class="skill-name">Comunicação técnica / Documentação</div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill purple" style="width:55%"></div></div>
+                        <div class="progress-label"><span>Desenvolvendo</span><span>55%</span></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-name">Resolução de problemas sob pressão</div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill green" style="width:70%"></div></div>
+                        <div class="progress-label"><span>Forte</span><span>70%</span></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-name">Liderança técnica / Mentoria</div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill yellow" style="width:30%"></div></div>
+                        <div class="progress-label"><span>Início</span><span>30%</span></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-name">Proatividade / Ownership</div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill green" style="width:75%"></div></div>
+                        <div class="progress-label"><span>Forte</span><span>75%</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== CONTRIBUIÇÕES ===== -->
+        <div class="panel" id="panel-contributions">
+            <div class="section-title">› Contribuições relevantes</div>
+
+            <div class="contribution-item">
+                <div class="contrib-header">
+                    <div class="contrib-title">Migração ArgoCD — 4 ambientes</div>
+                    <div class="contrib-date">Empresa anterior</div>
+                </div>
+                <div class="contrib-desc">
+                    Participação na migração do pipeline GitOps com ArgoCD para 4 ambientes (dev, staging, homolog, prod).
+                    Configuração de ApplicationSets, sync policies, health checks e rollback strategies.
+                    Garantiu deploy contínuo com zero downtime para múltiplos serviços.
+                </div>
+                <div class="contrib-tags">
+                    <span class="contrib-tag">ArgoCD</span>
+                    <span class="contrib-tag">GitOps</span>
+                    <span class="contrib-tag">Kubernetes</span>
+                    <span class="contrib-tag">Multi-env</span>
+                </div>
+            </div>
+
+            <div class="contribution-item">
+                <div class="contrib-header">
+                    <div class="contrib-title">Carbon Lens — MVP Open Source</div>
+                    <div class="contrib-date">Projeto pessoal · 2026</div>
+                </div>
+                <div class="contrib-desc">
+                    Criação de ferramenta CLI/Web para visibilidade de pegada de carbono em infraestrutura AWS.
+                    Interface TUI estilo terminal, correlação custo × emissão de CO₂, sugestões de otimização verde.
+                    Deployado no GitHub Pages.
+                </div>
+                <div class="contrib-tags">
+                    <span class="contrib-tag">GreenOps</span>
+                    <span class="contrib-tag">AWS</span>
+                    <span class="contrib-tag">Open Source</span>
+                    <span class="contrib-tag">Web</span>
+                </div>
+            </div>
+
+            <div class="contribution-item">
+                <div class="contrib-header">
+                    <div class="contrib-title">Automação de chamados DevOps</div>
+                    <div class="contrib-date">Empresa atual</div>
+                </div>
+                <div class="contrib-desc">
+                    Identificação de padrões recorrentes em chamados de infraestrutura e criação de automações
+                    para reduzir toil. Scripts de self-healing, runbooks automatizados e alertas proativos.
+                </div>
+                <div class="contrib-tags">
+                    <span class="contrib-tag">Automação</span>
+                    <span class="contrib-tag">SRE</span>
+                    <span class="contrib-tag">Toil reduction</span>
+                </div>
+            </div>
+
+            <div class="contribution-item">
+                <div class="contrib-header">
+                    <div class="contrib-title">Knowledge Base DevOps (Brain)</div>
+                    <div class="contrib-date">Empresa atual · 2026</div>
+                </div>
+                <div class="contrib-desc">
+                    Construção de base de conhecimento compartilhada do time DevOps com documentação de 
+                    troubleshooting, runbooks, decisões arquiteturais e padrões de infraestrutura.
+                </div>
+                <div class="contrib-tags">
+                    <span class="contrib-tag">Documentação</span>
+                    <span class="contrib-tag">Knowledge sharing</span>
+                    <span class="contrib-tag">DevOps culture</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== CARREIRA ===== -->
+        <div class="panel" id="panel-career">
+            <div class="section-title">› Visão de carreira</div>
+
+            <div class="vision-card">
+                <h3>⎈ Onde quero chegar</h3>
+                <p>
+                    Evoluir de DevOps Engineer para <strong style="color:var(--accent-green)">Senior DevOps / Platform Engineer</strong>,
+                    com capacidade de projetar plataformas internas (IDP), definir padrões de infraestrutura para múltiplos times,
+                    e ser referência em práticas de GreenOps e sustentabilidade em cloud.
+                </p>
+            </div>
+
+            <div class="k9s-table">
+                <div class="k9s-table-header">
+                    <div class="title">Trilha de evolução</div>
+                    <div class="count">2026 → 2031</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status green"></div>
+                    <div class="name">DevOps Engineer (atual)</div>
+                    <div class="meta">2026</div>
+                    <div class="tag tag-done">AGORA</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status yellow"></div>
+                    <div class="name">DevOps Engineer — nível pleno consolidado</div>
+                    <div class="meta">2027</div>
+                    <div class="tag tag-progress">PRÓXIMO</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status blue"></div>
+                    <div class="name">Senior DevOps Engineer</div>
+                    <div class="meta">2028–2029</div>
+                    <div class="tag tag-planned">PLANEJADO</div>
+                </div>
+                <div class="k9s-row">
+                    <div class="status purple"></div>
+                    <div class="name">Staff Engineer / Platform Engineer</div>
+                    <div class="meta">2030–2031</div>
+                    <div class="tag tag-planned">PLANEJADO</div>
+                </div>
+            </div>
+
+            <div class="section-title" style="margin-top:24px">› Possibilidades de direção</div>
+            <div class="skill-grid">
+                <div class="skill-card">
+                    <div class="skill-name" style="color:var(--accent-blue)">🛤️ Platform Engineering</div>
+                    <div class="skill-level" style="margin-top:6px">
+                        Construir Internal Developer Platforms (IDP). Backstage, Crossplane, golden paths.
+                        Foco em developer experience.
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-name" style="color:var(--accent-green)">🌱 GreenOps / Sustainable Cloud</div>
+                    <div class="skill-level" style="margin-top:6px">
+                        Especializar em eficiência energética de cloud. Carbon-aware computing, 
+                        scheduling inteligente, FinOps + sustentabilidade.
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-name" style="color:var(--accent-yellow)">🔒 DevSecOps</div>
+                    <div class="skill-level" style="margin-top:6px">
+                        Security-first infrastructure. Supply chain security, SBOM, 
+                        policy-as-code (OPA/Kyverno), secrets management.
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-name" style="color:var(--accent-purple)">📐 SRE / Reliability</div>
+                    <div class="skill-level" style="margin-top:6px">
+                        Foco em confiabilidade. SLOs, error budgets, chaos engineering,
+                        incident management, capacity planning.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="k9s-footer">
+        <div class="commands">
+            <span><kbd>1-6</kbd> navegar</span>
+            <span><kbd>←→</kbd> painéis</span>
+        </div>
+        <div class="status-right">● online</div>
+    </div>
+
+    <script>
+        function showPanel(name) {
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.k9s-nav button').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById('panel-' + name).classList.add('active');
+            document.querySelector(`[data-panel="${name}"]`).classList.add('active');
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const panels = ['profile', 'goals', 'roadmap', 'skills', 'contributions', 'career'];
+            const num = parseInt(e.key);
+            if (num >= 1 && num <= 6) {
+                showPanel(panels[num - 1]);
+            }
+            if (e.key === 'ArrowRight') {
+                const current = panels.findIndex(p => document.getElementById('panel-' + p).classList.contains('active'));
+                if (current < panels.length - 1) showPanel(panels[current + 1]);
+            }
+            if (e.key === 'ArrowLeft') {
+                const current = panels.findIndex(p => document.getElementById('panel-' + p).classList.contains('active'));
+                if (current > 0) showPanel(panels[current - 1]);
+            }
+        });
+    </script>
+
+</body>
+</html>
